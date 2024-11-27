@@ -66,7 +66,7 @@ export class DataService {
     limit = limit > 0 ? limit : 10;
 
     const skip = (page - 1) * limit;
-
+    console.log(skip, 'skip');
     const [data, total] = await Promise.all([
       this.dataModel.find().skip(skip).limit(limit).exec(),
       this.dataModel.countDocuments(),

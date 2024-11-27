@@ -4,6 +4,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Get,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -12,6 +13,7 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { DataService } from './data.service';
 import { Express } from 'express';
@@ -79,8 +81,11 @@ export class DataController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Obtener todos los datos' })
-  async getAllData() {
-    return this.dataService.getAllData();
+  @ApiOperation({ summary: 'Obtener datos paginados' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  async getAllData(@Query('page') page = 1, @Query('limit') limit = 10) {
+    console.log(page, 'page');
+    return this.dataService.getAllData(page, limit);
   }
 }
