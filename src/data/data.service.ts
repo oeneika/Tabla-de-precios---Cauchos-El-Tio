@@ -51,6 +51,7 @@ export class DataService {
   async getAllData(
     page = 1,
     limit = 10,
+    search = '',
   ): Promise<{
     data: Data[];
     total: number;
@@ -65,13 +66,17 @@ export class DataService {
     page = page > 0 ? page : 1;
     limit = limit > 0 ? limit : 10;
 
+    // Create search filter
+    const searchFilter = search
+      ? { descripcion: { $regex: search, $options: 'i' } }
+      : {};
+
     const skip = (page - 1) * limit;
     console.log(skip, 'skip');
     const [data, total] = await Promise.all([
-      this.dataModel.find().skip(skip).limit(limit).exec(),
-      this.dataModel.countDocuments(),
+      this.dataModel.find(searchFilter).skip(skip).limit(limit).exec(),
+      this.dataModel.countDocuments(searchFilter),
     ]);
-
     return {
       data,
       total,

@@ -84,8 +84,13 @@ export class DataController {
   @ApiOperation({ summary: 'Obtener datos paginados' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  async getAllData(@Query('page') page = 1, @Query('limit') limit = 10) {
+  @ApiQuery({ name: 'search', required: false, type: String })
+  async getAllData(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+    @Query('search') search = '',
+  ) {
     console.log(page, 'page');
-    return this.dataService.getAllData(page, limit);
+    return this.dataService.getAllData(page, limit, search);
   }
 }
